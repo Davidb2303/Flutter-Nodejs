@@ -26,10 +26,13 @@ const getPotentialMatches = async (req, res) => {
       select: {
         id: true,
         username: true,
+        email: true,
         name: true,
         age: true,
         photoUrl: true,
-        interests: true
+        interests: true,
+        createdAt: true,
+        updatedAt: true
       },
       take: 10 // Limitar a 10 usuarios por request
     });

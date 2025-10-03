@@ -173,7 +173,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                                 end: Alignment.bottomCenter,
                                 colors: [
                                   Colors.transparent,
-                                  Colors.black.withValues(alpha: 0.7),
+                                  Colors.black.withOpacity(0.7),
                                 ],
                               ),
                             ),
@@ -223,7 +223,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
                                           end: Alignment.bottomCenter,
                                           colors: [
                                             Colors.transparent,
-                                            Colors.black.withValues(alpha: 0.8),
+                                            Colors.black.withOpacity(0.8),
                                           ],
                                         ),
                                       ),

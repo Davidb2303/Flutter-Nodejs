@@ -19,18 +19,24 @@ const getMatches = async (req, res) => {
           select: {
             id: true,
             username: true,
+            email: true,
             name: true,
             photoUrl: true,
-            age: true
+            age: true,
+            createdAt: true,
+            updatedAt: true
           }
         },
         user2: {
           select: {
             id: true,
             username: true,
+            email: true,
             name: true,
             photoUrl: true,
-            age: true
+            age: true,
+            createdAt: true,
+            updatedAt: true
           }
         },
         messages: {

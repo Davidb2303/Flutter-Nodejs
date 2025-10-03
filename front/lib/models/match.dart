@@ -15,9 +15,9 @@ class Match {
 
   factory Match.fromJson(Map<String, dynamic> json) {
     return Match(
-      id: json['id'],
-      user: User.fromJson(json['user']),
-      createdAt: DateTime.parse(json['createdAt']),
+      id: json['id'] ?? 0,
+      user: User.fromJson(json['user'] ?? {}),
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
       lastMessage: json['lastMessage'] != null 
           ? LastMessage.fromJson(json['lastMessage'])
           : null,
@@ -38,9 +38,9 @@ class LastMessage {
 
   factory LastMessage.fromJson(Map<String, dynamic> json) {
     return LastMessage(
-      content: json['content'],
-      createdAt: DateTime.parse(json['createdAt']),
-      isFromMe: json['isFromMe'],
+      content: json['content'] ?? '',
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
+      isFromMe: json['isFromMe'] ?? false,
     );
   }
 }
