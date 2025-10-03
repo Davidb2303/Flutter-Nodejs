@@ -1,0 +1,79 @@
+// Esquema de Prisma para la base de datos de la app de citas
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String
+  age          Int?
+  photoUrl     String?  @map("photo_url")
+  interests    String?  // JSON string de intereses
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relaciones
+  sentSwipes     Swipe[] @relation("UserSentSwipes")
+  receivedSwipes Swipe[] @relation("UserReceivedSwipes")
+  sentMatches    Match[] @relation("UserSentMatches")
+  receivedMatches Match[] @relation("UserReceivedMatches")
+  sentMessages   Message[] @relation("MessageSender")
+  receivedMessages Message[] @relation("MessageReceiver")
+
+  @@map("users")
+}
+
+model Swipe {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  targetId  Int      @map("target_id")
+  isLike    Boolean  @map("is_like")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  user   User @relation("UserSentSwipes", fields: [userId], references: [id])
+  target User @relation("UserReceivedSwipes", fields: [targetId], references: [id])
+
+  @@unique([userId, targetId])
+  @@map("swipes")
+}
+
+model Match {
+  id        Int      @id @default(autoincrement())
+  user1Id   Int      @map("user1_id")
+  user2Id   Int      @map("user2_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relaciones
+  user1    User      @relation("UserSentMatches", fields: [user1Id], references: [id])
+  user2    User      @relation("UserReceivedMatches", fields: [user2Id], references: [id])
+  messages Message[]
+
+  @@unique([user1Id, user2Id])
+  @@map("matches")
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  matchId    Int      @map("match_id")
+  senderId   Int      @map("sender_id")
+  receiverId Int      @map("receiver_id")
+  content    String   @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  readAt     DateTime? @map("read_at")
+
+  // Relaciones
+  match    Match @relation(fields: [matchId], references: [id])
+  sender   User  @relation("MessageSender", fields: [senderId], references: [id])
+  receiver User  @relation("MessageReceiver", fields: [receiverId], references: [id])
+
+  @@map("messages")
+}
